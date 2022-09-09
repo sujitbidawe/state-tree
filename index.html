@@ -180,12 +180,16 @@
                     props.store.dispatch(removeTodoAction(todo.id));
                     return API.deleteTodo(todo.id).catch(() => {
                         props.store.dispatch(addTodoAction(todo));
-                        alert('An error occured. Try again.');
+                        alert('An error occurred. Try again.');
                     })
                 }
 
                 const toggleItem = (todo) => {
                     props.store.dispatch(toggleTodoAction(todo.id));
+                    return API.saveTodoToggle(todo.id).catch(() => {
+                        props.store.dispatch(toggleTodoAction(todo.id));
+                        alert('An error occurred. Try again.');
+                    })
                 }
 
                 return (
@@ -216,7 +220,7 @@
                     props.store.dispatch(removeGoalAction(goal.id));
                     API.deleteGoal((goal.id)).catch(() => {
                         props.store.dispatch(addGoalAction(goal));
-                        alert('An error occured. Try again.')
+                        alert('An error occurred. Try again.')
                     })
                 }
 
