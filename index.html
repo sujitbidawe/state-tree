@@ -229,18 +229,18 @@
                 const addItem = (event) => {
                     event.preventDefault();
 
-                    props.store.dispatch(handleAddTodo(
+                    props.dispatch(handleAddTodo(
                         inputRef.current.value,
                         () => (inputRef.current.value = '')
                     ));
                 }
 
                 const removeItem = (todo) => {
-                    props.store.dispatch(handleDeleteTodo(todo));
+                    props.dispatch(handleDeleteTodo(todo));
                 }
 
                 const toggleItem = (todo) => {
-                    props.store.dispatch(handleToggle(todo.id));
+                    props.dispatch(handleToggle(todo.id));
                 }
 
                 return (
@@ -253,20 +253,33 @@
                 )
             }
 
+            const ConnectedTodos = () => {
+                return (
+                    <Context.Consumer>
+                        {
+                            (store) => {
+                                const { todos } = store.getState();
+                                return <Todos todos={todos} dispatch={store.dispatch}/>
+                            }
+                        }
+                    </Context.Consumer>
+                )                
+            }
+
             const Goals = (props) => {
                 const inputRef = React.useRef();
 
                 const addItem = (event) => {
                     event.preventDefault();
 
-                    props.store.dispatch(handleAddGoal(
+                    props.dispatch(handleAddGoal(
                         inputRef.current.value,
                         () => (inputRef,current.value = '')
                     ));
                 }
 
                 const removeItem = (goal) => {
-                    props.store.dispatch(handleDeleteGoal(goal));
+                    props.dispatch(handleDeleteGoal(goal));
                 }
 
                 return (
@@ -279,11 +292,24 @@
                 )
             }
 
+            const ConnectedGoals = () => {
+                return (
+                    <Context.Consumer>
+                        {
+                            (store) => {
+                                const { goals } = store.getState();
+                                return <Goals goals={goals} dispatch={store.dispatch}/>
+                            }
+                        }
+                    </Context.Consumer>
+                )
+            }
+
             const App = (props) => {
 
                 const [value, setValue] = React.useState(0);
 
-                const { todos, goals, loading } = props.store.getState();
+                const { loading } = props.store.getState();
 
                 React.useEffect(() => {
                     props.store.dispatch(handleInitialData());
@@ -299,13 +325,35 @@
 
                 return (
                     <div>
-                        <Todos todos={todos} store={props.store} />
-                        <Goals goals={goals} store={props.store} />
+                        <ConnectedTodos />
+                        <ConnectedGoals />
                     </div>
                 )
             }
 
-            ReactDOM.render(<App store={store} />, document.getElementById('app'));
+            const ConnectedApp = () => {
+                return (
+                    <Context.Consumer>
+                        {
+                            (store) => {
+                                return <App store={store}/>
+                            }
+                        }
+                    </Context.Consumer>
+                )
+            }
+
+            const Context = React.createContext();
+
+            const Provider = (props) => {
+                return (
+                    <Context.Provider value={props.store}>
+                        {props.children}
+                    </Context.Provider>
+                )
+            }
+
+            ReactDOM.render(<Provider store={store}><ConnectedApp /></Provider>, document.getElementById('app'));
         </script>
     </body>
 </html>
