@@ -2,10 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './component/App';
+import reducer from './reducers';
+import middleware from './middleware';
+import { Provider } from 'react-redux';
+import { legacy_createStore as createStore} from 'redux';
+
+const store = createStore(reducer, middleware);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>
+  </Provider>
 );
