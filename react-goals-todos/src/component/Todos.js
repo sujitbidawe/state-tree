@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { connect, Connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { handleAddTodo, handleDeleteTodo, handleToggle } from '../actions/todos';
 import List from './List';
 
